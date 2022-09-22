@@ -1,6 +1,6 @@
 #import library
-#from bs4 import BeautifulSoup4
-#import requests
+from bs4 import BeautifulSoup
+import requests
 import pandas as pd
 import re
 import nltk
@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 file_to_read = "reviews.txt"
 positive_words = open("Bing_liu_positive.txt", "r").read().splitlines()
 negative_words = open("Bing_liu_negative.txt", "r").read().splitlines()
-text_file = open(file_to_read, "r", encoding="ANSI").read().splitlines()
+text_file = open(file_to_read, "r").read().splitlines()
 
 positive_review = []
 neutral_review = []
