@@ -1,43 +1,42 @@
-#import library
-from bs4 import BeautifulSoup
-import requests
-import pandas as pd
+#Import Library
 import re
+import pandas as pd
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from textblob import TextBlob
+import csv
 import nltk
-from nltk.corpus import stopwords, wordnet
+from nltk.corpus import stopwords
 from nltk import FreqDist, word_tokenize
-from nltk.stem.porter import PorterStemmer
-from nltk.stem import WordNetLemmatizer
-from os import path
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
 
-file_to_read = "reviews.txt"
-positive_words = open("Bing_liu_positive.txt", "r").read().splitlines()
-negative_words = open("Bing_liu_negative.txt", "r").read().splitlines()
-text_file = open(file_to_read, "r").read().splitlines()
 
-positive_review = []
-neutral_review = []
-negative_review = []
+#Read in the file
+review = []
+openfile = open('MovieReviewData_HW2.csv', 'r')
+positive_words = open('Bing_liu_positive.txt', "r").read().splitlines()
+negative_words = open('Bing_liu_negative.txt', "r").read().splitlines()
+# openfile = open('Challenge Lab #4 data/sampledata_wordfrequency.csv', 'r', encoding = "ISO-8859-1")
+r = csv.reader(openfile)
+for i in r:
+# get the first column only (ignoring the second column)
+    review.append(i)
+openfile.close()
 
-for review_text in text_file:
-    review_clean = re.sub(r"[\(<>/)!#$%&'*+-.^_`|~:’“”?]",'',review_text)
-    documents = [review_clean for document in review_text]
-    token = [[word for word in document.lower()] for document in documents]
-    for sentence in token:
-        positive = 0
-        negative = 0
-        for word in sentence:
-            if word in positive_words:
-                positive += 1
-            elif word in negative_words:
-                negative += 1
-        if positive-negative > 0:
-            positive_review.append(sentence)
-        elif positive-negative == 0:
-            neutral_review.append(sentence)
-        else:
-            negative_review.append(sentence)
-# the contents of each category showing in tokens
-print("Hello world")
+#Clean up
+new_texts = []
+flat_review = [''.join(ele) for ele in review]
+documents = [re.sub("[^a-zA-Z]+", " ", document) for document in flat_review]
+texts = [[word for word in document.lower().split()] for document in documents]
+new_documents = [item for sublist in new_texts for item in sublist]
+print(documents[:2])
+
+# print(len(texts[:2]))
+# for review in texts[:2]:
+#     print(review)
+#     print("\n")
+#     for word in review:
+#         #print(len(word))
+#         if len(word) >= 3:
+#             new_texts.append(word)
+# print(len(new_texts))
